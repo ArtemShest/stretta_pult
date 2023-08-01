@@ -48,7 +48,6 @@ void stepper_init(Stepper *stepper,
 
 	stepper->state = Wait;
 	stepper->curPosition = 0;
-	//stepper->stepDelay = 40;
 
 	stepper->forward.block = 0;
 	stepper->backward.block = 0;
@@ -63,7 +62,7 @@ void buttons_init(Stepper *stepper,
 	stepper->forward.btn_pin = btn_fw_pin;
 	stepper->backward.btn_port = btn_bw_port;
 	stepper->backward.btn_pin = btn_bw_pin;
-	stepper->timerPeriod = 29999;
+	stepper->timerPeriod = 19999;
 }
 
 void enders_init(Stepper *stepper,
@@ -168,17 +167,16 @@ void stepper_boost(Stepper *stepper, TIM_HandleTypeDef *timer) //ускорен�
 	stepper->countTimer++;
 	if (stepper->countTimer>30)
 	{
-		if (stepper->timerPeriod > 9999) // 3999) //7999
+		if (stepper->timerPeriod > 13999) // 3999) //7999
 		{
 			stepper->timerPeriod -= 500; // 700
-			__HAL_TIM_SET_AUTORELOAD(timer, stepper->timerPeriod); // меняем период таймера для регулировки скорости вращения двигателя
+			__HAL_TIM_SET_AUTORELOAD(timer, stepper->timerPeriod); // обновляем период таймера для регулировки скорости вращения двигателя
 		}
 
 		stepper->countTimer = 0;
 
 	}
 }
-
 
 void stepper_step(Stepper *stepper, TIM_HandleTypeDef *htim)
 {
